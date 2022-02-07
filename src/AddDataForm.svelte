@@ -1,9 +1,11 @@
 <script>
   import Modal from "svelte-simple-modal";
   import Content from "./Content.svelte";
+  import InstallerButton from "./InstallerButton.svelte";
   import CalibrateButton from "./CalibrateButton.svelte";
   import { buscar, send, read, newPackage } from "./Api";
   import { onMount } from "svelte";
+  import { apiURL } from "./Api";
   let idPackage = "";
   let dim = "";
   let cam = "";
@@ -211,7 +213,7 @@
 </script>
 
 <div>
-  <h1>Model Training</h1>
+  <h1>Tests api</h1>
   <div class="container-lists">
     <div class="Cameras">
       <h2>Camera</h2>
@@ -245,6 +247,9 @@
             <option value={dimensioner} />
           {/each}
         </datalist>
+        <Modal>
+          <InstallerButton data={{ ID: dim, Url: apiURL, Cam_type: cam }} />
+        </Modal>
       </div>
     </div>
   </div>
