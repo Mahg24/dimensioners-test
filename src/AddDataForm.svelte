@@ -3,12 +3,14 @@
   import Content from "./Content.svelte";
   import CalibrateButton from "./CalibrateButton.svelte";
   import { buscar, send, read, newPackage } from "./Api";
+  import { onMount } from "svelte";
   let idPackage = "";
   let dim = "123456";
-  let camera="structure";
+  let camera = "structure";
   let resultDataPackage = {};
   let save = false;
-
+  let cameras = [];
+  let dimensioners = ["1234567"];
   function assingData(data) {
     save = false;
     document.getElementById("height").value =
@@ -20,17 +22,52 @@
     document.getElementById("weight").value = parseFloat(data.weight);
   }
 
-  function changeCamera()
-  {
+  function loadCameras() {
+    fetch("https://698d8338-bb89-4028-8f18-f4713ba27363.mock.pstmn.io//cameras")
+      .then((res) => res.json())
+      .then((data) => {
+        cameras = data.cameras;
+        console.log(cameras);
+      });
+  }
 
-    if (document.querySelector('input[name="camara"]:checked').value==="intel") {
+  function loadDimensioners() {
+    fetch("https://698d8338-bb89-4028-8f18-f4713ba27363.mock.pstmn.io//cameras")
+      .then((res) => res.json())
+      .then((data) => {
+        dimensioners = data.cameras;
+        console.log(cameras);
+      });
+  }
 
-      dim="7890"
-      camera="intel"
-    }else{
-      dim = "123456";
-      camera="structure"
+  function changeCamera() {
+    let camera = document.getElementById("camera").value;
+    if (cameras.indexOf(camera) == -1) {
+      let save = document.getElementById("saveCamara");
+      save.style.display = "inline";
+    } else {
+      let save = document.getElementById("saveCamara");
+      save.style.display = "none";
     }
+  }
+
+  function changeDimensioner() {
+    let dimensioner = document.getElementById("dimensioner").value;
+    if (dimensioners.indexOf(dimensioner) == -1) {
+      let save = document.getElementById("saveDimensioner");
+      save.style.display = "inline";
+    } else {
+      let save = document.getElementById("saveDimensioner");
+      save.style.display = "none";
+    }
+  }
+
+  async function saveCamera() {
+    alert("melo");
+  }
+
+  function saveDimensioner() {
+    alert("melo");
   }
 
   async function getRealdata() {
@@ -82,7 +119,7 @@
     let raw = JSON.stringify({
       Serial: document.getElementById("serial").value,
       dimensioner: dim,
-      camera:camera,
+      camera: camera,
       Data: {
         height: parseFloat(document.getElementById("height").value) * 0.0254,
         width: parseFloat(document.getElementById("width").value) * 0.0254,
@@ -112,7 +149,7 @@
     }
     save = true;
     document.getElementById("btn").style.display = "none";
-    const result = await read(idPackage, camera,dim);
+    const result = await read(idPackage, camera, dim);
     console.log(result);
     if (!result.error) {
       const ObjIR = {
@@ -157,19 +194,48 @@
     while (num.length < size) num = "0" + num;
     return num;
   }
+  onMount(() => {
+    loadCameras();
+    loadDimensioners();
+  });
 </script>
 
 <div>
   <h1>Model Training</h1>
-     <h2>Camera</h2>
-  <div class="cameras">
-    <div class="cameras-option">
-      <label for="struncture">Structure</label>
-      <input type="radio" value="structure" checked name="camara" on:change="{changeCamera}" id="structureCamera">
+  <div class="container-lists">
+    <div class="Cameras">
+      <h2>Camera</h2>
+      <div class="list-cameras">
+        <input id="camera" list="cameras" on:blur={changeCamera} />
+        <button class="save-button" id="saveCamara" on:click={saveCamera}
+          >Save</button
+        >
+        <datalist id="cameras">
+          {#each cameras as camera}
+            <option value={camera} />
+          {/each}
+        </datalist>
+      </div>
     </div>
-    <div class="cameras-option">
-      <label for="intel">Intel</label>
-      <input type="radio" value="intel"  on:change="{changeCamera}" name="camara" id="intelCamera">
+    <div class="Dimensioners">
+      <h2>Dimensioner</h2>
+      <div class="list-dimensioners">
+        <input
+          id="dimensioner"
+          list="dimensioners"
+          on:blur={changeDimensioner}
+        />
+        <button
+          class="save-button"
+          id="saveDimensioner"
+          on:click={saveDimensioner}>Save</button
+        >
+        <datalist id="dimensioners">
+          {#each dimensioners as dimensioner}
+            <option value={dimensioner} />
+          {/each}
+        </datalist>
+      </div>
     </div>
   </div>
   <div>
@@ -208,10 +274,14 @@
 </div>
 
 <style>
-  .cameras
-  {
+  .save-button {
+    margin-left: 10px;
+    width: auto;
+    height: auto;
+    display: none;
+  }
+  .container-lists {
     display: flex;
-    align-content: center;
     justify-content: space-evenly;
   }
   .data {
