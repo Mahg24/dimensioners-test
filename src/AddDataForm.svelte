@@ -5,8 +5,8 @@
   import { buscar, send, read, newPackage } from "./Api";
   import { onMount } from "svelte";
   let idPackage = "";
-  let dim = "123456";
-  let camera = "structure";
+  let dim = "";
+  let cam = "";
   let resultDataPackage = {};
   let save = false;
   let cameras = [];
@@ -47,6 +47,7 @@
       save.style.display = "inline";
     } else {
       let save = document.getElementById("saveCamara");
+      cam = camera;
       save.style.display = "none";
     }
   }
@@ -58,6 +59,7 @@
       save.style.display = "inline";
     } else {
       let save = document.getElementById("saveDimensioner");
+      dim = dimensioner;
       save.style.display = "none";
     }
   }
@@ -119,7 +121,7 @@
     let raw = JSON.stringify({
       Serial: document.getElementById("serial").value,
       dimensioner: dim,
-      camera: camera,
+      camera: cam,
       Data: {
         height: parseFloat(document.getElementById("height").value) * 0.0254,
         width: parseFloat(document.getElementById("width").value) * 0.0254,
@@ -138,6 +140,14 @@
     }
   }
   async function readButton() {
+    if (dim == "") {
+      alert("You must select a dimensioner");
+      return;
+    }
+    if (cam == "") {
+      alert("You must select a camera");
+      return;
+    }
     if (idPackage == "") {
       alert("You must save the package first");
       return;
@@ -149,7 +159,7 @@
     }
     save = true;
     document.getElementById("btn").style.display = "none";
-    const result = await read(idPackage, camera, dim);
+    const result = await read(idPackage, cam, dim);
     console.log(result);
     if (!result.error) {
       const ObjIR = {
