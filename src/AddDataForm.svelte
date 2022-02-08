@@ -25,7 +25,7 @@
   }
 
   function loadCameras() {
-    fetch("https://698d8338-bb89-4028-8f18-f4713ba27363.mock.pstmn.io//cameras")
+    fetch(apiURL + "/cameras")
       .then((res) => res.json())
       .then((data) => {
         cameras = data.cameras;
@@ -34,11 +34,10 @@
   }
 
   function loadDimensioners() {
-    fetch("https://698d8338-bb89-4028-8f18-f4713ba27363.mock.pstmn.io//cameras")
+    fetch(apiURL + "/dimensioners")
       .then((res) => res.json())
       .then((data) => {
-        dimensioners = data.cameras;
-        console.log(cameras);
+        dimensioners = data.dimensioners;
       });
   }
 
@@ -67,11 +66,39 @@
   }
 
   async function saveCamera() {
-    alert("melo");
+    fetch(apiURL + "/cameras", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: document.getElementById("camera").value,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        cameras.push(data.name);
+        let save = document.getElementById("saveCamara");
+        save.style.display = "none";
+      });
   }
 
   function saveDimensioner() {
-    alert("melo");
+    fetch(apiURL + "/dimensioners", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: document.getElementById("dimensioner").value,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        dimensioners.push(data.name);
+        let save = document.getElementById("saveDimensioner");
+        save.style.display = "none";
+      });
   }
 
   async function getRealdata() {

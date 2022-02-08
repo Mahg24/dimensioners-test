@@ -1,4 +1,5 @@
-export const apiURL = "http://ec2-54-198-54-106.compute-1.amazonaws.com";
+export const apiURL =
+  "http://ec2-34-239-111-77.compute-1.amazonaws.com:3334/api";
 export async function buscar(serial) {
   const requestOptions = {
     method: "GET",
@@ -56,4 +57,20 @@ export async function newPackage() {
     }
   );
   return result.json();
+}
+
+export async function loadCameras() {
+  return await fetch(apiURL + "/cameras")
+    .then((res) => res.json())
+    .then((data) => {
+      return data.cameras;
+    });
+}
+
+export async function loadDimensioners() {
+  return await fetch(apiURL + "/cameras")
+    .then((res) => res.json())
+    .then((data) => {
+      return data.dimensioners;
+    });
 }
