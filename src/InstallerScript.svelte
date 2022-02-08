@@ -7,5 +7,8 @@
 </script>
 
 <p>
-  python Socket.py --ID "{message.ID}" --Url "{message.Url}" --Cam_type "{message.Cam_type}"
+  python Socket.py --ID "{message.ID}" --Url "{message.Url.replaceAll(
+    "/api",
+    ""
+  )}" --Cam_type "{message.Cam_type}"
 </p>
