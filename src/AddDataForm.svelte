@@ -152,9 +152,9 @@
       dimensioner: dim,
       camera: cam,
       Data: {
-        height: parseFloat(document.getElementById("height").value) * 0.0254,
-        width: parseFloat(document.getElementById("width").value) * 0.0254,
-        length: parseFloat(document.getElementById("length").value) * 0.0254,
+        height: parseFloat(document.getElementById("height").value),
+        width: parseFloat(document.getElementById("width").value),
+        length: parseFloat(document.getElementById("length").value),
         weight: parseFloat(document.getElementById("weight").value),
       },
     });
