@@ -39,7 +39,7 @@ export async function read(id, camara, dim) {
     },
     body: JSON.stringify({ dimensioner: dim, Package: camara }),
   };
-  const result = await fetch(apiURL + "/api/packages/" + id, requestOptions);
+  const result = await fetch(apiURL + "/packages/" + id, requestOptions);
   console.timeEnd("Medir");
   return result.json();
 }

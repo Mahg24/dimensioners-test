@@ -15,14 +15,14 @@
       headers: { "Content-Type": "application/json" },
       redirect: "follow",
     };
-    let url = apiURL + "/api/packages/calibrate";
+    let url = apiURL + "/packages/calibrate";
     fetch(url, requestOptions)
       .then((response) => response.text())
       .then((result) => open(Surprise, { message: result }))
       .catch((error) => open(Surprise, { message: error }));
   };
 </script>
-  
+
 <p><button on:click={showSurprise}>Calibrate {dimensioner}</button></p>
 
 <style>
