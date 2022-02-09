@@ -15,12 +15,9 @@
   let dimensioners = ["1234567"];
   function assingData(data) {
     save = false;
-    document.getElementById("height").value =
-      parseFloat(data.height) / 0.0254 || "";
-    document.getElementById("width").value =
-      parseFloat(data.width) / 0.0254 || "";
-    document.getElementById("length").value =
-      parseFloat(data.length) / 0.0254 || "";
+    document.getElementById("height").value = parseFloat(data.height) || "";
+    document.getElementById("width").value = parseFloat(data.width) || "";
+    document.getElementById("length").value = parseFloat(data.length) || "";
     document.getElementById("weight").value = parseFloat(data.weight);
   }
 
