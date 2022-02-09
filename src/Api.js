@@ -49,13 +49,9 @@ export async function newPackage() {
     method: "GET",
     redirect: "follow",
   };
-  const result = await fetch(
-    apiURL + "/api/packages/newPackage",
-    requestOptions,
-    {
-      mode: "no-cors",
-    }
-  );
+  const result = await fetch(apiURL + "/packages/newPackage", requestOptions, {
+    mode: "no-cors",
+  });
   return result.json();
 }
 
