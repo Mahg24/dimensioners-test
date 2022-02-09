@@ -6,7 +6,7 @@ export async function buscar(serial) {
     redirect: "follow",
   };
   const result = await fetch(
-    apiURL + "/api/packages?Serial=" + serial,
+    apiURL + "/packages?Serial=" + serial,
     requestOptions,
     {
       mode: "no-cors",
@@ -24,7 +24,7 @@ export async function send(data) {
     },
     body: data,
   };
-  const result = await fetch(apiURL + "/api/packages", requestOptions);
+  const result = await fetch(apiURL + "/packages", requestOptions);
   return result.json();
 }
 
