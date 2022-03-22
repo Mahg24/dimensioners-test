@@ -3,7 +3,7 @@
   import Content from "./Content.svelte";
   import InstallerButton from "./InstallerButton.svelte";
   import CalibrateButton from "./CalibrateButton.svelte";
-  import { buscar, send, read, newPackage } from "./Api";
+  import { buscar, send, read, newPackage, activate, desactivate } from "./Api";
   import { onMount } from "svelte";
   import { apiURL } from "./Api";
   let idPackage = "";
@@ -219,6 +219,74 @@
     document.getElementById("btn").style.display = "inline";
   }
 
+  async function Activate() {
+    let raw = JSON.stringify({
+      Serial: document.getElementById("serial").value,
+    });
+
+    const result = await send(raw);
+    console.log(result);
+    if (result.statusCode == undefined) {
+      idPackage = result._id;
+      alert("Guardado");
+    } else if (result.statusCode == 400) {
+      alert("Error");
+    }
+  }
+  async function Desactivate() {
+    if (dim == "") {
+      alert("You must select a dimensioner");
+      return;
+    }
+    if (cam == "") {
+      alert("You must select a camera");
+      return;
+    }
+    if (idPackage == "") {
+      alert("You must save the package first");
+      return;
+    }
+    if (save) {
+      if (!confirm("Are you sure you want to read the data again?")) {
+        return false;
+      }
+    }
+    save = true;
+    document.getElementById("btn").style.display = "none";
+    const result = await read(idPackage, cam, dim);
+    console.log(result);
+    if (!result.error) {
+      const ObjIR = {
+        name: "IR",
+        High: result.result.Info_IR.High,
+        Weight: result.result.Info_IR.Weight,
+        L1a: result.result.Info_IR.L1a.Length,
+        L2a: result.result.Info_IR.L2a.Length,
+        L1b: result.result.Info_IR.L1b.Length,
+        L2b: result.result.Info_IR.L2b.Length,
+      };
+
+      const ObjRGB = {
+        name: "RGB",
+        High: result.result.Info_RGB.High,
+        Weight: result.result.Info_RGB.Weight,
+        L1a: result.result.Info_RGB.L1a.Length,
+        L2a: result.result.Info_RGB.L2a.Length,
+        L1b: result.result.Info_RGB.L1b.Length,
+        L2b: result.result.Info_RGB.L2b.Length,
+      };
+      resultDataPackage = {
+        IR: ObjIR,
+        RGB: ObjRGB,
+      };
+    } else {
+      resultDataPackage = {
+        result,
+      };
+    }
+    document.getElementById("btn").style.display = "inline";
+  }
+
   async function getNew() {
     const newpackage = await newPackage();
     let num = parseInt(newpackage.Serial.split("-")[1]) + 1;
@@ -301,6 +369,10 @@
     <div class="flex-data">
       <button on:click={saveButton}>Save</button>
       <button on:click={readButton}>Read</button>
+    </div>
+    <div class="flex-data">
+      <button>Activate package</button>
+      <button>Desactivate package</button>
     </div>
 
     <Modal>

@@ -70,3 +70,29 @@ export async function loadDimensioners() {
       return data.dimensioners;
     });
 }
+
+export async function activate(data) {
+  const requestOptions = {
+    method: "POST",
+    redirect: "follow",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: data,
+  };
+  const result = await fetch(apiURL + "/activate", requestOptions);
+  return result.json();
+}
+
+export async function desactivate(data) {
+  const requestOptions = {
+    method: "POST",
+    redirect: "follow",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: data,
+  };
+  const result = await fetch(apiURL + "/desactivate", requestOptions);
+  return result.json();
+}
